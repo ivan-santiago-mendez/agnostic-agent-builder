@@ -115,19 +115,26 @@ Each ticket gets a local context folder at `.context/<TICKET-KEY>/`:
 
 ## Worktrees
 
-Each ticket implementation is isolated in its own git worktree so `main` is never touched during active development.
+**Working directly on `main` or `master` is PROHIBITED for any change in any repository — no exceptions.**
+
+Every change — whether part of a ticket workflow or a standalone fix — must happen inside a dedicated worktree on its own branch. This applies to the hub repo, wiki repo, component repos, and any other repository under management.
 
 ### Convention
 | Item | Pattern |
 |---|---|
 | **Directory** | `../agnostic-agent-builder-worktrees/<TICKET-KEY>/` |
-| **Branch** | `feat/<TICKET-KEY>` · `fix/<TICKET-KEY>` · `chore/<TICKET-KEY>` |
+| **Branch** | `feat/<TICKET-KEY>` · `fix/<TICKET-KEY>` · `chore/<TICKET-KEY>` · `hotfix/<TICKET-KEY>` |
 
 ### Lifecycle
-1. **Created** — `version-control-administrator` runs `git worktree add` at Stage 3 of End-to-End workflow
-2. **Used** — `code-implementer`, `test-generator`, and review agents operate inside the worktree path
+1. **Created** — `version-control-administrator` runs `git worktree add` BEFORE any staging or committing, for every change in every repo
+2. **Used** — `code-implementer`, `test-generator`, review agents, and any agent making file changes operate inside the worktree path
 3. **Kept** — worktree persists until the PR is confirmed merged (never auto-deleted)
 4. **Cleaned up** — `version-control-administrator` runs `git worktree remove` after merge confirmation
+
+### Pre-Commit Gate
+`version-control-administrator` MUST run a worktree check at Step 0 of every Stage & Commit operation:
+- If current branch is `main`/`master` → **STOP**, create a worktree first, then proceed
+- If already on a feature/fix/chore/hotfix branch → proceed normally
 
 ### Reference Commands
 ```bash
@@ -153,6 +160,7 @@ git branch -d feat/PROJ-123
 - **Human review before all writes** — ticket comments/transitions and any external system edits require a preview + explicit approval.
 - **Check prerequisites** before suggesting running the application (deps installed, env vars set, DB migrated, etc.).
 - **All git write operations go through `version-control-administrator`** — no other agent may stage, commit, branch, push, or manage worktrees directly. This includes asking the user git-related questions (scope, message, files). Delegate immediately with no pre-screening.
+- **No direct commits to `main`/`master`** — `version-control-administrator` MUST create a worktree before staging or committing any change in any repository, regardless of whether a formal ticket exists.
 
 ---
 

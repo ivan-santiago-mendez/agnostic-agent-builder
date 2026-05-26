@@ -250,10 +250,12 @@ OS commands directly.
 - If a specialist agent is unavailable, note it as a Warning and skip that stage.
 
 ### Worktree Rules
+- **Worktrees are MANDATORY for every change in every repository** — not just for ticket implementations. No commit may land on `main` or `master` directly, ever.
 - **Directory convention**: `../agnostic-agent-builder-worktrees/<TICKET-KEY>/`
-- **Branch convention**: `feat/<TICKET-KEY>`, `fix/<TICKET-KEY>`, or `chore/<TICKET-KEY>` based on ticket type
+- **Branch convention**: `feat/<TICKET-KEY>`, `fix/<TICKET-KEY>`, `chore/<TICKET-KEY>`, or `hotfix/<TICKET-KEY>` based on ticket type
 - **Worktree creation and removal are always delegated to `version-control-administrator`** — never to `local-system-administrator` or inline bash
+- **`version-control-administrator` runs a pre-commit worktree check at Step 0 of every Stage & Commit** — if the active branch is `main`/`master`, it stops and creates a worktree before proceeding
 - **Never remove automatically** — worktree cleanup (Stage 10) is deferred and requires explicit user confirmation after PR merge
-- **Track in state** — `orchestration-state.json` must include the `worktree` block from the moment Stage 2 completes
+- **Track in state** — `orchestration-state.json` must include the `worktree` block from the moment Stage 2 completes (or from the moment a worktree is created for standalone changes)
 - **Idempotent creation** — if the worktree directory already exists (workflow resume), skip creation and log as Info
 - **All write agents operate inside the worktree path** — pass the worktree path as working directory to `code-implementer`, `test-generator`, and `documentation-writer`
