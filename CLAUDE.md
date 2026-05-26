@@ -221,7 +221,7 @@ Each component project lives in its own git worktree (isolated branch + director
 
 | Component | Repo | Ticket | Status |
 |---|---|---|---|
-| taulia-wco-agent | `../agnostic-agent-builder-worktrees/ait-1085/` | AIT-1085 | in_progress |
+| _(none)_ | — | — | — |
 
 ### Component Notes
 
