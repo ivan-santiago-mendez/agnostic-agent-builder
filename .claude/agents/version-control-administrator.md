@@ -49,11 +49,47 @@ managed by this orchestration hub.
 
 ---
 
+## Mandatory Worktree Rule
+
+**Working directly on `main` or `master` is PROHIBITED for any change in any repository.**
+
+Before staging or committing any files — regardless of how small the change, regardless of whether a ticket exists — you MUST ensure the work is happening inside a worktree on a dedicated branch. This rule applies universally: hub repo, wiki repo, component repos, or any other repository under management.
+
+### Pre-Commit Worktree Check (runs before every Stage & Commit)
+
+```
+Step 0a: Run `git branch --show-current` to identify the active branch
+Step 0b: Run `git worktree list` to list all active worktrees
+
+IF the current branch is `main` or `master`:
+  → STOP. Do not stage or commit.
+  → Ask the user: "What ticket or label should this worktree be named after?"
+  → Create a worktree: git worktree add ../agnostic-agent-builder-worktrees/<NAME> -b <type>/<NAME>
+  → Instruct the user (or the delegating agent) to re-run the operation from inside the new worktree path
+  → Report the worktree path and branch created
+
+IF the current branch is already a feature/fix/chore/hotfix branch AND a worktree exists for it:
+  → Proceed to Stage & Commit normally
+
+IF the current branch is already a feature/fix/chore/hotfix branch BUT no worktree exists:
+  → Log ℹ️ Info: "Branch exists but no worktree registered — proceeding in current checkout"
+  → Proceed to Stage & Commit normally (branch isolation is sufficient)
+```
+
+**Exception — hub repo infrastructure changes**: Changes to `.claude/agents/`, `.claude/hooks/`, `.claude/scripts/`, `CLAUDE.md`, or `README.md` that are made as direct corrections during an active session (not part of a ticket implementation) MAY be committed on `main` only if:
+1. The user explicitly acknowledges the direct-main commit, AND
+2. The change is a hotfix or config correction with no associated ticket
+
+In all other cases, the worktree rule is absolute.
+
+---
+
 ## Workflows
 
 ### 1. Stage & Commit
 
 ```
+Step 0: Mandatory worktree check (see Mandatory Worktree Rule above)
 Step 1: Run `git status` to show current working tree state
 Step 2: Show the user which files will be staged
 Step 3: Run `git diff` (or `git diff --cached`) to confirm scope
