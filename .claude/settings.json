@@ -1,0 +1,52 @@
+{
+  "enableAllProjectMcpServers": true,
+  "permissions": {
+    "allow": [
+      "Bash(sqlite3 *)",
+      "Bash(chmod +x *)",
+      "Bash(mkdir -p *)",
+      "Bash(git *)",
+      "Bash(jq *)",
+      "Bash(bash .claude/hooks/*.sh)",
+      "Bash(bash scripts/*.sh)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(find *)",
+      "Bash(which *)",
+      "Write(.claude/memory-banks/*)",
+      "Bash(echo *)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/session-init.sh",
+            "timeout": 10,
+            "statusMessage": "Resetting session sentinel..."
+          },
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/load-memory-bank.sh",
+            "timeout": 10,
+            "statusMessage": "Loading memory bank..."
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/first-turn-guard.sh",
+            "timeout": 10,
+            "statusMessage": "Checking session initialization..."
+          }
+        ]
+      }
+    ]
+  }
+}

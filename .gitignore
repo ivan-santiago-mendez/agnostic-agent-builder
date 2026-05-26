@@ -1,0 +1,6 @@
+.env
+.env.local
+**/*Zone.Identifier
+.context/
+.claude/memory-banks/
+/.idea
