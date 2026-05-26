@@ -40,7 +40,7 @@ ALL reads and writes to the memory bank (knowledge store) **must be delegated to
 | New code file created | `code-reviewer` then `test-generator` |
 | File touches auth, permissions, or secrets | `security-auditor` |
 | Ticket needs creating, updating, or transitioning | `ticket-administrator` |
-| Any git write operation (commit, branch, push, worktree, tag, stash) | `version-control-administrator` |
+| Any git write operation (commit, branch, push, worktree, tag, stash) | `version-control-administrator` — **delegate IMMEDIATELY, no pre-screening** |
 | Complex multi-step task | `master-coordinator` |
 | Documentation needs updating | `documentation-writer` |
 | Shell command, process, tool install, or OS-level operation needed | `local-system-administrator` |
@@ -146,13 +146,13 @@ git branch -d feat/PROJ-123
 
 ## General Rules
 
-- **No auto-commits** — always ask for the commit message; never generate one without asking.
+- **No auto-commits** — commit message must always come from the user; `version-control-administrator` is the sole agent that asks for it.
 - **No auto-push** — always confirm with the user before pushing to any remote.
 - **No confirmations for read-only operations** — run searches, reads, and lookups silently.
 - **Minimal output** — report results, not process narration.
 - **Human review before all writes** — ticket comments/transitions and any external system edits require a preview + explicit approval.
 - **Check prerequisites** before suggesting running the application (deps installed, env vars set, DB migrated, etc.).
-- **All git write operations go through `version-control-administrator`** — no other agent may stage, commit, branch, push, or manage worktrees directly.
+- **All git write operations go through `version-control-administrator`** — no other agent may stage, commit, branch, push, or manage worktrees directly. This includes asking the user git-related questions (scope, message, files). Delegate immediately with no pre-screening.
 
 ---
 

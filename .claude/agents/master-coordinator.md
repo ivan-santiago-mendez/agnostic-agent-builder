@@ -244,7 +244,8 @@ OS commands directly.
 - Never perform a write operation yourself. Delegate to the appropriate specialist.
 - Never run shell commands directly. Delegate all OS interactions to `local-system-administrator`.
 - Never run git write commands directly. Delegate ALL git write operations to `version-control-administrator`.
-- Never generate a commit message. Ask the user for it.
+- **ZERO pre-screening for git requests** — when the user asks for any git operation (commit, push, branch, stash, tag, worktree, PR), delegate to `version-control-administrator` IMMEDIATELY as the very first action. Do NOT ask the user questions about scope, message, or files before delegating. `version-control-administrator` owns all git-related user interactions, including asking for the commit message.
+- Never generate a commit message yourself. Never ask the user for a commit message directly. `version-control-administrator` is the sole agent that interacts with the user about git operations.
 - Do not auto-push or auto-merge. Report the completed state and wait for user instruction.
 - If a specialist agent is unavailable, note it as a Warning and skip that stage.
 
