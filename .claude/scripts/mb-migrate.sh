@@ -15,7 +15,7 @@ if [[ "${OSTYPE:-}" == msys* || "${OSTYPE:-}" == cygwin* ]]; then
   exec wsl -e bash -c "cd /home/$(wsl -e whoami) && bash /home/$(wsl -e whoami)/0_repo_wsl/taulia-hackaton-2026/scripts/mb-migrate.sh"
 fi
 
-PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+PROJECT_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 DB_PATH="${MEMORY_BANK_DB:-$PROJECT_ROOT/.claude/memory-banks/agents-memory-manager}"
 DB_DIR="$(dirname "$DB_PATH")"
 
